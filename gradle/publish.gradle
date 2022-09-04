@@ -13,7 +13,7 @@ buildscript {
         classpath "net.darkhax.curseforgegradle:CurseForgeGradle:1.0.11"
         classpath "org.kohsuke:github-api:1.114"
         classpath "org.ajoberstar.grgit:grgit-gradle:4.1.0"
-        classpath "gradle.plugin.com.modrinth.minotaur:Minotaur:2.4.4"
+        classpath "com.modrinth.minotaur:Minotaur:2.4.4"
     }
 }
 
