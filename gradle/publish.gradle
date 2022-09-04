@@ -26,7 +26,14 @@ import javax.net.ssl.HttpsURLConnection
 import java.nio.file.Files
 
 archivesBaseName = project.archives_base_name
-version = "${project.minecraft_version}-${project.currentTag.replace('v', '')}"
+version = "${project.minecraft_version}-${getVersion()}"
+
+def getVersion() {
+    if (project.hasProperty('currentTag')) {
+        return project.currentTag
+    }
+    return project.mod_version
+}
 
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
