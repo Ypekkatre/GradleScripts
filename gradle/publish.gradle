@@ -160,7 +160,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
     mainFile.releaseType = 'release'
     mainFile.displayName = "${archivesBaseName}-${version}"
     mainFile.changelog = releaseChangelog
-    if project.hasProperty("curse_dependencies") {
+    if (project.hasProperty("curse_dependencies")) {
         project.getProperty("curse_dependencies").split(' ').each { requirement ->
             mainFile.addRequirement(requirement)
         }
