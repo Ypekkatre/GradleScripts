@@ -145,7 +145,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
     mainFile.releaseType = 'release'
     mainFile.displayName = "${archivesBaseName}-${version}"
     mainFile.changelog = changelog
-    for requirement in project.requirement.split(' ') {
+    project.dependencies.split(' ').each { requirement ->
         mainFile.addRequirement(requirement)
     }
     mainFile.addGameVersion(project.minecraft_version)
