@@ -14,6 +14,7 @@ buildscript {
     }
 }
 
+
 //buildscript.configurations.classpath.each { println it }
 
 apply plugin: net.dumbcode.gradlehook.GradleWebhookPlugin
@@ -27,6 +28,11 @@ import java.nio.file.Files
 
 archivesBaseName = project.archives_base_name
 version = "${project.minecraft_version}-${getVersion()}"
+
+Properties additionalProperties = new Properties()
+if (file("extra.properties").exists()) {
+    additionalProperties.load(file("extra.properties").newReader())
+}
 
 def getVersion() {
     if (project.hasProperty('currentTag')) {
@@ -45,7 +51,7 @@ ext.stabilitySuffix = ""
 ext.curseforgeDownloadLink = null
 ext.modrinthDownloadLink = null
 ext.githubDownloadLink = null
-ext.releaseType = project.default_release_typeo
+ext.releaseType = project.default_release_type
 
 ext.mainFile = null
 
