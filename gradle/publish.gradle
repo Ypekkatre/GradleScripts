@@ -159,7 +159,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
     mainFile = upload(project.curseforge_id, remapJar)
     mainFile.releaseType = 'release'
     mainFile.displayName = "${archivesBaseName}-${version}"
-    mainFile.changelog = changelog
+    mainFile.changelog = releaseChangelog
     project.dependencies.split(' ').each { requirement ->
         mainFile.addRequirement(requirement)
     }
