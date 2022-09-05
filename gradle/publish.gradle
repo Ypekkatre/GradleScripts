@@ -27,7 +27,7 @@ import javax.net.ssl.HttpsURLConnection
 import java.nio.file.Files
 
 archivesBaseName = project.archives_base_name
-version = "${project.minecraft_version}-${getVersion()}"
+ext.versionDisplay = "${project.minecraft_version}-${getVersion()}"
 
 ext.additionalProperties = new Properties()
 if (file("extra.properties").exists()) {
@@ -130,8 +130,8 @@ modrinth {
         return
     }
     projectId = project.modrinth_id
-    versionNumber = version
-    versionName = "${archivesBaseName}-${version}"
+    versionNumber = versionDisplay
+    versionName = "${archivesBaseName}-${versionDisplay}"
     versionType = curseReleaseType
     uploadFile = remapJar
     changelog = releaseChangelog
@@ -141,7 +141,7 @@ modrinth {
 
 tasks.modrinth.doLast {
   if (tasks.modrinth.wasUploadSuccessful()) {
-    modrinthDownloadLink = "https://modrinth.com/mod/$project.modrinth_slug/version/$version"
+    modrinthDownloadLink = "https://modrinth.com/mod/$project.modrinth_slug/version/$versionDisplay"
     sendDiscordWebhook()
   }
 }
@@ -158,7 +158,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
 
     mainFile = upload(project.curseforge_id, remapJar)
     mainFile.releaseType = 'release'
-    mainFile.displayName = "${archivesBaseName}-${version}"
+    mainFile.displayName = "${archivesBaseName}-${versionDisplay}"
     mainFile.changelog = releaseChangelog
     if (project.hasProperty("curse_dependencies")) {
         project.getProperty("curse_dependencies").split(' ').each { requirement ->
@@ -264,7 +264,15 @@ task github {
 	dependsOn build
 
     onlyIf {
-        System.getenv().GITHUB_TOKEN
+        String webhook
+		if (additionalProperties["github_token"] != null) {
+			webhook = additionalProperties["github_token"]
+		} else if (System.getenv("github_token") != null) {
+			webhook = System.getenv("github_token")
+		} else {
+			System.out.println("No GitHub token found...")
+			return
+		}
     }
 
     doLast {
@@ -280,7 +288,7 @@ task github {
         }
 
         def ghRelease = releaseBuilder.create()
-        ghRelease.uploadAsset(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"), "application/java-archive");
+        ghRelease.uploadAsset(remapJar, "application/java-archive");
         githubDownloadLink = ghRelease.getHtmlUrl()
         sendDiscordWebhook()
     }
@@ -303,8 +311,8 @@ task discord {
 		String commitHash = 'git rev-parse --verify --short HEAD'.execute().text.trim()
 
 		File file = remapJar.archiveFile.get().asFile
-		String fileName = "$project.archives_base_name}-${project.mod_version}-${commitHash}.jar"
-		String text = "<:Kronos:799707832399691867> **${project.archives_base_name} v${project.mod_version}-${commitHash} for ${project.minecraft_version}**"
+		String fileName = "$project.archives_base_name}-${version}-${commitHash}.jar"
+		String text = "<:Kronos:799707832399691867> **${project.archives_base_name} v${version}-${commitHash} for ${project.minecraft_version}**"
 		URL url = new URL(webhook)
 		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection()
 
