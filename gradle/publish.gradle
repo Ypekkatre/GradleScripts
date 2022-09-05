@@ -36,6 +36,9 @@ if (file("extra.properties").exists()) {
 
 def getVersion() {
     if (project.hasProperty('currentTag')) {
+        if (project.currentTag.startsWith("v")) {
+            return project.currentTag.substring(1)
+        }
         return project.currentTag
     }
     return project.mod_version
@@ -266,9 +269,9 @@ task github {
     doLast {
         String gh_token
 		if (additionalProperties["github_token"] != null) {
-			webhook = additionalProperties["github_token"]
+			gh_token = additionalProperties["github_token"]
 		} else if (System.getenv("github_token") != null) {
-			webhook = System.getenv("github_token")
+			gh_token = System.getenv("github_token")
 		} else {
 			System.out.println("No GitHub token found...")
 			return
