@@ -328,7 +328,7 @@ task discord {
                 url = System.getenv("action_url")
                 field {
                     name = "Changes:"
-                    value = changelog
+                    value = changeLog
                 }
                 field {
                     name = "Downloads:"
