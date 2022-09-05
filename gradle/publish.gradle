@@ -263,8 +263,8 @@ void sendDiscordWebhook() {
 task github {
 	dependsOn build
 
-    onlyIf {
-        String webhook
+    doLast {
+        String gh_token
 		if (additionalProperties["github_token"] != null) {
 			webhook = additionalProperties["github_token"]
 		} else if (System.getenv("github_token") != null) {
@@ -273,10 +273,7 @@ task github {
 			System.out.println("No GitHub token found...")
 			return
 		}
-    }
-
-    doLast {
-        def github = org.kohsuke.github.GitHub.connectUsingOAuth(System.getenv().GITHUB_TOKEN as String)
+        def github = org.kohsuke.github.GitHub.connectUsingOAuth(gh_token as String)
         def repository = github.getRepository(System.getenv().GITHUB_REPOSITORY)
 
         def releaseBuilder = new org.kohsuke.github.GHReleaseBuilder(repository, project.getProperty("currentTag"))
