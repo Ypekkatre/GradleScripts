@@ -288,7 +288,7 @@ task github {
         }
 
         def ghRelease = releaseBuilder.create()
-        ghRelease.uploadAsset("${archivesBaseName}-${versionDisplay}.jar", remapJar, "application/java-archive");
+        ghRelease.uploadAsset(((AbstractArchiveTask) remapJar).getArchiveFile().get().getAsFile(), "application/java-archive");
         githubDownloadLink = ghRelease.getHtmlUrl()
         sendDiscordWebhook()
     }
