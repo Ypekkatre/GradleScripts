@@ -254,7 +254,7 @@ void sendDiscordWebhook() {
                 }
                 field {
                     name = "Downloads:"
-                    value = "[Modrinth]($modrinthDownloadLink)\n[CurseForge]($curseforgeDownloadLink)\n[$github_emote GitHub]($githubDownloadLink)"
+                    value = "[Modrinth]($modrinthDownloadLink)\n[CurseForge]($curseforgeDownloadLink)\n[GitHub]($githubDownloadLink)"
                 }
             }
         }.send(webhook)
